@@ -1,2 +1,10 @@
 
 /* Your CSS Code here. */
+
+ body {
+      display: flex;
+      justify-content: center;
+      padding-top: 30px;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
