@@ -1,21 +1,18 @@
-const inputs = document.querySelectorAll('.controls input');
-const player = document.querySelector('.player');
-const video = player.querySelector('.viewer');
-const toggle = player.querySelector('.toggle');
-const progress = player.querySelector('.progress');
-const progressFilled = player.querySelector('.progress__filled');
-const sliders = player.querySelectorAll('.player__slider');
-const skipButtons = player.querySelectorAll('[data-skip]');
+const video = document.querySelector('.player__video');
+const toggle = document.querySelector('.toggle');
+const progress = document.querySelector('.progress'); // first progress bar
+const progressFilled = document.querySelector('.progress__filled');
+const volume = document.querySelector('input[name="volume"]');
+const playbackRate = document.querySelector('input[name="playbackRate"]');
+const skipButtons = document.querySelectorAll('[data-skip]');
 
-
-function handleUpdate() {
-  const suffix = this.dataset.sizing || '';
-  document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
-}
-
+/* Play / Pause */
 function togglePlay() {
-  const method = video.paused ? 'play' : 'pause';
-  video[method]();
+  if (video.paused) {
+    video.play();
+  } else {
+    video.pause();
+  }
 }
 
 function updateButton() {
@@ -51,14 +48,15 @@ video.addEventListener('timeupdate', handleProgress);
 
 toggle.addEventListener('click', togglePlay);
 
-sliders.forEach(slider => slider.addEventListener('input', handleRangeUpdate));
-skipButtons.forEach(button => button.addEventListener('click', skip));
+volume.addEventListener('input', handleRangeUpdate);
+playbackRate.addEventListener('input', handleRangeUpdate);
+
+skipButtons.forEach(button =>
+  button.addEventListener('click', skip)
+);
 
 let mouseDown = false;
 progress.addEventListener('click', scrub);
-progress.addEventListener('mousemove', (e) => mouseDown && scrub(e));
-progress.addEventListener('mousedown', () => mouseDown = true);
-progress.addEventListener('mouseup', () => mouseDown = false);
- 
-inputs.forEach(input => input.addEventListener('change', handleUpdate));
-inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+progress.addEventListener('mousemove', e => mouseDown && scrub(e));
+progress.addEventListener('mousedown', () => (mouseDown = true));
+progress.addEventListener('mouseup', () => (mouseDown = false));
